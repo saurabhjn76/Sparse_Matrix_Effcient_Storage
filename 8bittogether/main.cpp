@@ -76,6 +76,16 @@ string xorTenThousandBitString(string longBitString1, string longBitString2){
 	return result;
 }
 
+int countSetBits(int n)
+{
+    int count = 0;
+    while (n)
+    {
+      n &= (n-1) ;
+      count++;
+    }
+    return count;
+}
 
 
 
@@ -87,7 +97,7 @@ string rightShift(string s){
 	string result;
 	// For the first Eight bits
 
-	int firstByte = eightBitToInteger(0);
+	int firstByte = eightBitToInteger(s,0);
 	result.append(paddZeroes(to_string((firstByte & MASKMSB)>>1)));
 
 	for(int i=1;i<LENGTH;i++){
@@ -103,26 +113,35 @@ string rightShift(string s){
 string leftShift(string s){
 	string result;
 	for(int i=0;i<LENGTH-1;i++){
-		int current = eightBitToInteger(i);
-		int successor = eightBitToInteger(i+1);
+		int current = eightBitToInteger(s,i);
+		int successor = eightBitToInteger(s,i+1);
 		int resultInt = ((current & MASKMSB) << 1) + (successor > MASKMSB) ? 0 : 1 ;
 		//check if it it of length 3
 		result.append(paddZeroes(to_string(resultInt)));
 	}
 	// for the last 8 bits
-	int lastByte = eightBitToInteger(LENGTH-1);
+	int lastByte = eightBitToInteger(s,LENGTH-1);
 	result.append(paddZeroes(to_string((lastByte & MASKMSB) << 1)));
 	return result;
 }
 
-string distance(string s1, string s2){
-	
+ int oneByteHammingDistance(int byteOne, int byteTwo){
+ 	int result = byteOne^byteTwo;
+ 	return countSetBits(result);
+ }
+
+int hammingDistance(string s1, string s2){
+	int distance = 0;
+	for(int i=0;i< LENGTH ;i++){
+		distance += oneByteHammingDistance(eightBitToInteger(s1,i),eightBitToInteger(s2,i)); 
+	}
+	return distance;
 }
 
 int main()
 {
 	 srand (time(NULL));
-	 int k
+	 int k=2; // depends on the given text
 	 map <string,int> mapping;
 	 map <int,string> reverse_mapping;
 
@@ -132,14 +151,9 @@ int main()
 	 	mapping.insert(pair <string,int>(s1,i+1));
 	 	reverse_mapping(pair<int,string> (i+1,s1));
 	 }
+	 ////////////////////////////////////
+	 // read the file
 
-	// R(i,10){
-	// 	cout << genrandomEightBit() ;
-	// 	printf("\n");
-	// }
-	 // string str ="123456789123456789";
-	 // R(i,6)
-	 // cout << str.substr(3*i,3)  << "\n";
 
 	return 0;
 }
