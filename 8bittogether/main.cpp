@@ -16,13 +16,13 @@ using namespace std;
 # define INF                         (int)1e9
 # define EPS                         1e-9
 # define MOD 1000000007
-# define LENGTH 1250      // 10000/8 =    1250
+# define LENGTH 1250  // 10000/8 =    1250
 # define MASKMSB 127
 # define MASKLSB 254
 
 typedef long long ll;
 
-
+ vector<int> v[400];
 
 
 
@@ -56,7 +56,7 @@ string genrateTenThousandBitString(){
 
 
 int eightBitToInteger(string s, int index){
-	return = stoi(s.substr(3*index,3));
+	return  stoi(s.substr(3*index,3));
 }
 
 
@@ -97,31 +97,34 @@ string rightShift(string s){
 	string result;
 	// For the first Eight bits
 
-	int firstByte = eightBitToInteger(s,0);
-	result.append(paddZeroes(to_string((firstByte & MASKMSB)>>1)));
+	
 
-	for(int i=1;i<LENGTH;i++){
-		int current = eightBitToInteger(i);
-		int predecessor = eightBitToInteger(i-1);
-		int resultInt = ((current & MASKLSB) >> 1) + (predecessor & 1) ? 0 : 128 ;
+	for(int i=0;i<LENGTH-1;i++){
+		int current = eightBitToInteger(s,i);
+		int predecessor = eightBitToInteger(s,i+1);
+		//printf("%d -- %d\n",((predecessor & 1)==1 ? 0 : 128));
+		int resultInt = ((current & MASKLSB) >> 1) + ((predecessor & 1)==1 ? 128 : 0) ;
 		// check if it it of length 3
 		result.append(paddZeroes(to_string(resultInt)));
 	}
+	int lastByte = eightBitToInteger(s,LENGTH-1);
+	result.append(paddZeroes(to_string((lastByte & MASKLSB)>>1)));
 	return result;
 }
 
 string leftShift(string s){
 	string result;
-	for(int i=0;i<LENGTH-1;i++){
+	int firstByte = eightBitToInteger(s,0);
+	result.append(paddZeroes(to_string((firstByte & MASKMSB) << 1)));
+	
+	for(int i=1;i<LENGTH;i++){
 		int current = eightBitToInteger(s,i);
-		int successor = eightBitToInteger(s,i+1);
-		int resultInt = ((current & MASKMSB) << 1) + (successor > MASKMSB) ? 0 : 1 ;
+		int successor = eightBitToInteger(s,i-1);
+		int resultInt = ((current & MASKMSB) << 1) + ((successor < MASKMSB) ? 0 : 1) ;
 		//check if it it of length 3
 		result.append(paddZeroes(to_string(resultInt)));
 	}
-	// for the last 8 bits
-	int lastByte = eightBitToInteger(s,LENGTH-1);
-	result.append(paddZeroes(to_string((lastByte & MASKMSB) << 1)));
+
 	return result;
 }
 
@@ -138,6 +141,48 @@ int hammingDistance(string s1, string s2){
 	return distance;
 }
 
+void readFile(string fileName){
+	string line;
+  ifstream myfile (fileName);
+  int index =0;
+  if (myfile.is_open())
+  {
+  	int count = 0;
+  	
+  	string ss ;
+    while (getline (myfile,line))
+    {
+    count++;
+    if(count%2==0){
+    	//cout << line << '\n';
+    	//cout << line.length() <<'\n';
+
+    	for(int i=1;i<line.length();i++){
+    		ss="";
+    		while(line[i]!=',' && line[i]!=']'){
+    			ss+= line[i];
+    			i++;
+    			//printf("sD\n");
+    		}
+    		i++;
+    		//printf("%d\n",stoi(ss) );
+    		v[index].push_back(stoi(ss));
+    	}
+    	index++;
+
+    }
+    else	
+      continue;
+    }
+
+    myfile.close();
+    
+  }
+
+  else { cout << "Unable to open file";   }
+
+}
+
 int main()
 {
 	 srand (time(NULL));
@@ -145,14 +190,21 @@ int main()
 	 map <string,int> mapping;
 	 map <int,string> reverse_mapping;
 
-	 // genrates the map of string and reverse string
+	 //genrates the map of string and reverse string
 	 for(int i = 0 ;i<k;i++){
 	 	string s1 = genrateTenThousandBitString();
 	 	mapping.insert(pair <string,int>(s1,i+1));
-	 	reverse_mapping(pair<int,string> (i+1,s1));
+	 	reverse_mapping.insert(pair<int,string> (i+1,s1));
 	 }
 	 ////////////////////////////////////
 	 // read the file
+	readFile("k10.txt");
+	////////////////////////////////////
+	
+
+
+
+
 
 
 	return 0;
