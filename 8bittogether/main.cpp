@@ -186,21 +186,48 @@ void readFile(string fileName){
 int main()
 {
 	 srand (time(NULL));
-	 int k=2; // depends on the given text
+	 int k=10; // depends on the given text
 	 map <string,int> mapping;
 	 map <int,string> reverse_mapping;
 
 	 //genrates the map of string and reverse string
 	 for(int i = 0 ;i<k;i++){
 	 	string s1 = genrateTenThousandBitString();
-	 	mapping.insert(pair <string,int>(s1,i+1));
-	 	reverse_mapping.insert(pair<int,string> (i+1,s1));
+	 	mapping.insert(pair <string,int>(s1,i));
+	 	reverse_mapping.insert(pair<int,string> (i,s1));
 	 }
 	 ////////////////////////////////////
 	 // read the file
 	readFile("k10.txt");
 	////////////////////////////////////
+
+	string singletriplet, rowXored="", profileVector[10];
+	//Training
+	for(int profiles = 0; profiles< 10; profiles++) {
+		profileVector[profiles]="";
+		for(int i=0;i<30;i++){
+			rowXored="";
+			for(int j=0;j<v[40*profiles+i].size()-2;j++) { /// for triplet 
+				singletriplet = xorTenThousandBitString(xorTenThousandBitString(leftShift(leftShift(reverse_mapping.at(v[40*profiles+i][j]))),leftShift(reverse_mapping.at(v[40*profiles+i][j+1]))),reverse_mapping.at(v[40*profiles+i][j+2]));
+
+				if(rowXored==""){
+					rowXored = singletriplet;
+				} else {
+					rowXored = xorTenThousandBitString(rowXored,singletriplet);
+				}
+				}
+			if(profileVector[profiles]==""){
+				profileVector[profiles] = rowXored;
+			} else {
+				profileVector[profiles] = xorTenThousandBitString(profileVector[profiles], rowXored);
+			}
+		}
+	}
+	R(i,10) 
+	cout << profileVector[i] <<"\n";
+
 	
+
 
 
 
