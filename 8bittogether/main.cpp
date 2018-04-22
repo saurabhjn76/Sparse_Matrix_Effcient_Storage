@@ -183,12 +183,27 @@ void readFile(string fileName){
 
 }
 
+int getNearestProfileVector(string profileVector[10], string rowXored){
+	int minimum_hamming_distance =100000;
+	int minimum_hamming_distance_label = -1;
+	int hammingDistanc=0;
+	for(int i=0;i<10;i++){
+		hammingDistanc =  hammingDistance(profileVector[i],rowXored);
+		if(hammingDistanc <minimum_hamming_distance ){
+			minimum_hamming_distance = hammingDistanc;
+			minimum_hamming_distance_label = i;
+		}
+	}
+	return minimum_hamming_distance_label;
+}
+
 int main()
 {
 	 srand (time(NULL));
-	 int k=10; // depends on the given text
+	 int k=200; // depends on the given text
 	 map <string,int> mapping;
 	 map <int,string> reverse_mapping;
+	 int miss=0, hit =0;
 
 	 //genrates the map of string and reverse string
 	 for(int i = 0 ;i<k;i++){
@@ -198,7 +213,7 @@ int main()
 	 }
 	 ////////////////////////////////////
 	 // read the file
-	readFile("k10.txt");
+	readFile("k200.txt");
 	////////////////////////////////////
 
 	string singletriplet, rowXored="", profileVector[10];
@@ -215,7 +230,7 @@ int main()
 				} else {
 					rowXored = xorTenThousandBitString(rowXored,singletriplet);
 				}
-				}
+			}
 			if(profileVector[profiles]==""){
 				profileVector[profiles] = rowXored;
 			} else {
@@ -223,10 +238,42 @@ int main()
 			}
 		}
 	}
-	R(i,10) 
-	cout << profileVector[i] <<"\n";
+	// R(i,10) 
+	// cout << profileVector[i] <<"\n";
 
+
+	// testing
 	
+
+	int label[100];	
+	for(int profiles =0 ; profiles<10; profiles++){
+		for(int i =30;i<40;i++){
+			rowXored ="";
+			for(int j=0;j<v[40*profiles+i].size()-2;j++) { /// for triplet 
+				singletriplet = xorTenThousandBitString(xorTenThousandBitString(leftShift(leftShift(reverse_mapping.at(v[40*profiles+i][j]))),leftShift(reverse_mapping.at(v[40*profiles+i][j+1]))),reverse_mapping.at(v[40*profiles+i][j+2]));
+
+				if(rowXored==""){
+					rowXored = singletriplet;
+				} else {
+					rowXored = xorTenThousandBitString(rowXored,singletriplet);
+				}
+			}
+			label[10*profiles+i-30] = getNearestProfileVector(profileVector,rowXored);
+			if(label[10*profiles+i-30]!=profiles){
+				miss++;
+			} else {
+				hit++;
+			}
+		}
+	}
+
+	R(i,100){
+		printf("profiles %d,Label %d\n",i,label[i]);
+	}
+
+	printf("hit-%d\nmiss-%d\n",hit,miss );
+
+
 
 
 
