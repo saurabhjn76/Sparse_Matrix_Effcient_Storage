@@ -39,32 +39,29 @@ def pad_zeroes(s):
 
 def make8bitstring(s):
 	f=''
-	for i in range(0,2):
+	for i in range(0,1250):
 		#print i, s[8*i:8*(i+1)]
 		c = s[8*i:8*(i+1)]
-		f+= pad_zeroes(str(int(c,2)))
+		f+= pad_zeroes(str(int(c[::-1],2)))
 	return f
 
 def binfrom8bitstring(s):
-	bin8 = lambda x : ''.join(reversed([str((x >> i) & 1) for i in range(8)]))
+	bin8 = lambda x : ''.join(([str((x >> i) & 1) for i in range(8)]))
 	f =''
-	for i in range(0,2):
+	for i in range(0,1250):
 		#print i, s[3*i: 3*(i+1)]
 		c = s[3*i: 3*(i+1)]
+		print "-------",bin8(int(c))
 		f+= bin8(int(c))
 	return f
 
 def leftShift(s):
 	ss =''
 	ss+= '0' + s[0:len(s)-1]
-	print s
-	print ss
 	return ss
 def rightShift(s):
 	ss =''
 	ss+= s[1:] +'0'
-	print s
-	print ss
 	return ss
 
 def hammingDistance(s1,s2):
@@ -85,32 +82,33 @@ def xorString(s1,s2):
 
 
 
-# s = random.randint(0, 2**10000 - 1)
-# b = BitArray(uint=s, length=10000)
-# a1 = str(b.bin)
-# #print str(b.bin)
-# print make8bitstring(str(b.bin))
-# #print('/////////////////////////////////////////////////////////')
-# s = random.randint(0, 2**10000 - 1)
-# b = BitArray(uint=s, length=10000)
-# a2 = str(b.bin)
-# #print str(b.bin)
-# print make8bitstring(str(b.bin))
+s = random.randint(0, 2**10000 - 1)
+b = BitArray(uint=s, length=10000)
+a1 = str(b.bin)
+#print str(b.bin)
+print make8bitstring(str(b.bin))
+#print('/////////////////////////////////////////////////////////')
+s = random.randint(0, 2**10000 - 1)
+b = BitArray(uint=s, length=10000)
+a2 = str(b.bin)
+#print str(b.bin)
+print make8bitstring(str(b.bin))
 
-# #print xorString('1010101010','0101010101')
+#print xorString('1010101010','0101010101')
 
-# print ('XORRRrrrrrrrrrr')
+print ('XORRRrrrrrrrrrr')
 
-# print make8bitstring(xorString(a1,a2))
-# print ('hamming distance')
-# print hammingDistance(a1,a2)
-# print ('left shift')
-print make8bitstring(leftShift(binfrom8bitstring('254254')))
-# print ('right shift')
-print make8bitstring(rightShift(binfrom8bitstring('254254')))
+print make8bitstring(xorString(a1,a2))
+print ('hamming distance')
+print hammingDistance(a1,a2)
+print ('left shift')
+print make8bitstring(leftShift(a1))
+print ('right shift')
+print make8bitstring(rightShift(a1))
 
 
 
+		
 # print binfrom8bitstring('255255')
 
 # print binfrom8bitstring('254255')
