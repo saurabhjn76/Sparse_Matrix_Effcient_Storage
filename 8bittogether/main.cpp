@@ -199,7 +199,7 @@ int getNearestProfileVector(string profileVector[10], string rowXored){
 int main()
 {
 	 srand (time(NULL));
-	 int k=50; // depends on the given text
+	 int k=10; // depends on the given text
 	 map <string,int> mapping;
 	 map <int,string> reverse_mapping;
 	 int miss=0, hit =0;
@@ -220,7 +220,7 @@ int main()
 	 }
 	 //////////////////////////////////
 	// read the file
-	readFile("k50.txt");
+	readFile("k10.txt");
 	////////////////////////////////////
 
 	string singletriplet, rowXored="", profileVector[10];
