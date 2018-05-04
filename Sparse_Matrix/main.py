@@ -1,9 +1,18 @@
 import random
 from collections import deque
 import numpy as np
+import string
 import VectorMath
 from mapping import mapInit
 from bitstring import BitArray
+import sys
+import numpy as np
+import string
+import utils
+import pandas as pd
+import os
+
+alphabet = string.lowercase + " " 
 
 __author__ = "Saurabh Jain, https://github.com/saurabhjn76/"
 
@@ -79,32 +88,46 @@ def xorString(s1,s2):
 			f += '0'
 	return f
 
+def generate_letter_id_vectors(N, k, alph=alphabet):
+	# build row-wise k-sparse random index matrix
+	# each row is random index vector for letter
+	num_letters = len(alphabet)
+	RI_letters = np.zeros((num_letters,N))
+	for i in xrange(num_letters):
+			rand_idx = np.random.permutation(N)
+			RI_letters[i,rand_idx[0:k]] = 1
+			RI_letters[i,rand_idx[k:2*k]] = -1
+	return RI_letters
 
 
 
-s = random.randint(0, 2**10000 - 1)
-b = BitArray(uint=s, length=10000)
-a1 = str(b.bin)
-#print str(b.bin)
-print make8bitstring(str(b.bin))
-#print('/////////////////////////////////////////////////////////')
-s = random.randint(0, 2**10000 - 1)
-b = BitArray(uint=s, length=10000)
-a2 = str(b.bin)
-#print str(b.bin)
-print make8bitstring(str(b.bin))
+# s = random.randint(0, 2**10000 - 1)
+# b = BitArray(uint=s, length=10000)
+# a1 = str(b.bin)
+# #print str(b.bin)
+# print make8bitstring(str(b.bin))
+# #print('/////////////////////////////////////////////////////////')
+# s = random.randint(0, 2**10000 - 1)
+# b = BitArray(uint=s, length=10000)
+# a2 = str(b.bin)
+# #print str(b.bin)
+# print make8bitstring(str(b.bin))
 
-#print xorString('1010101010','0101010101')
+# #print xorString('1010101010','0101010101')
 
-print ('XORRRrrrrrrrrrr')
+# print ('XORRRrrrrrrrrrr')
 
-print make8bitstring(xorString(a1,a2))
-print ('hamming distance')
-print hammingDistance(a1,a2)
-print ('left shift')
-print make8bitstring(leftShift(a1))
-print ('right shift')
-print make8bitstring(rightShift(a1))
+# print make8bitstring(xorString(a1,a2))
+# print ('hamming distance')
+# print hammingDistance(a1,a2)
+# print ('left shift')
+# print make8bitstring(leftShift(a1))
+# print ('right shift')
+# print make8bitstring(rightShift(a1))
+
+
+print string.lowercase + " "
+
 
 
 

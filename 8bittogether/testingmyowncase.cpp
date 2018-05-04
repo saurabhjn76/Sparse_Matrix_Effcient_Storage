@@ -19,7 +19,7 @@ using namespace std;
 typedef long long ll;
 
 
- vector<int> source[400];
+ vector<int> source[300];
 
 
 vector<int> majority(vector<int> s1){
@@ -142,8 +142,7 @@ int getNearestProfileVector(vector<int> profileVector[10], vector<int> rowXored)
 	double cosineSimillarities=0;
 	for(int i=0;i<10;i++){
 		cosineSimillarities =  cosineSimillarity(profileVector[i],rowXored);
-		printf("%lf ",cosineSimillarities );
-
+		printf("%lf ", cosineSimillarities);
 		if(cosineSimillarities > max_cosine_simmilarity ){
 			max_cosine_simmilarity = cosineSimillarities;
 			max_cosine_simmilarity_label = i;
@@ -166,7 +165,7 @@ int main()
 	// 	printf("%d %d %d %d\n",a[i],b[i],c[i],d[i] );
 	// }
 	 srand (time(NULL));
-	 int k=10; // depends on the given text
+	 int k=100; // depends on the given text
 	 map <vector<int>,int> mapping;
 	 map <int,vector<int> > reverse_mapping;
 	 int miss=0, hit =0;
@@ -179,7 +178,7 @@ int main()
 	 }
 	 //////////////////////////////////
 	// read the file
-	readFile("k10.txt");
+	readFile("k100.txt");
 	////////////////////////////////////
 	 vector<int>  singletriplet, rowXored, profileVector[10];
 	//Training
@@ -218,8 +217,9 @@ int main()
 
 	 //testing
 	int label[100];	
+	rowXored.clear();
 	for(int profiles =0 ; profiles<10; profiles++){
-		//rowXored.clear();
+		
 		for(int i =30;i<40;i++){
 			for(int j=0;j<source[40*profiles+i].size()-2;j++) { /// for triplet 
 				singletriplet = addBitVectors(addBitVectors(leftShift(leftShift(reverse_mapping.at(source[40*profiles+i][j]))),leftShift(reverse_mapping.at(source[40*profiles+i][j+1]))),reverse_mapping.at(source[40*profiles+i][j+2]));
@@ -228,15 +228,24 @@ int main()
 					rowXored = singletriplet;
 				} else {
 					//printf("sadsad\n");
-					rowXored = majority(addBitVectors1(rowXored,singletriplet));
+					rowXored = addBitVectors1(rowXored,singletriplet);
 				}
 			}
 			//printf("sadasdasdasdasd\n");
+			rowXored = majority(rowXored);
+
 			label[10*profiles+i-30] = getNearestProfileVector(profileVector,rowXored);
+			R(f,100){
+				printf("%d ",rowXored[f]);
+			}
+			printf("\n---");
 			rowXored.clear();
-			if(label[10*profiles+i-30]!=profiles){
+			if(label[30*profiles+i-70]!=profiles){
 				miss++;
+				printf("%d\n", 30*profiles+i-70);
+				printf("0---------------------------\n");
 			} else {
+
 				hit++;
 			}
 		}
